@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "mCtds1+1PXk=",
+  "dgSpecHash": "MaOMCmuI10c=",
   "success": true,
   "projectFilePath": "C:\\Users\\nsulaiman.EJADA\\Desktop\\Projects\\GameStore\\gamestore.frontend\\GameStore.Frontend.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\nsulaiman.EJADA\\.nuget\\packages\\bootstrap\\5.3.3\\bootstrap.5.3.3.nupkg.sha512"
+  ],
   "logs": []
 }

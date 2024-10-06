@@ -26,3 +26,4 @@ C:\Users\nsulaiman.EJADA\Desktop\Projects\GameStore\gamestore.frontend\obj\Debug
 C:\Users\nsulaiman.EJADA\Desktop\Projects\GameStore\gamestore.frontend\obj\Debug\net8.0\GameStore.Frontend.pdb
 C:\Users\nsulaiman.EJADA\Desktop\Projects\GameStore\gamestore.frontend\obj\Debug\net8.0\GameStore.Frontend.genruntimeconfig.cache
 C:\Users\nsulaiman.EJADA\Desktop\Projects\GameStore\gamestore.frontend\obj\Debug\net8.0\ref\GameStore.Frontend.dll
+C:\Users\nsulaiman.EJADA\Desktop\Projects\GameStore\gamestore.frontend\obj\Debug\net8.0\GameStore.Frontend.sourcelink.json
