@@ -1,6 +1,7 @@
 ﻿@page "/editgame"
-@using Clients
-@using Models
+@inject NavigationManager NavigationManager
+@inject GamesClient GamesClient
+@inject GenresClient GenresClient
 
 <title>New game</title>
 <h3>New Game</h3>
@@ -10,36 +11,48 @@
 }
 else
 {
-    <EditForm Model="@game" FormName="editGame">
-        <div class="mb-3">
-            <label for="name" class="form-label">Name:</label>
-            <InputText id="name" @bind-Value="game.Name" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label for="genre" class="form-label">Genre:</label>
-            <InputSelect id="genre" @bind-Value="game.GenreId" class="form-control">
-                <option value="">Select a genre</option>
-                @foreach (var genre in genres)
-                {
-                    <option value="@genre.Id">@genre.Name</option>
-                }
-            </InputSelect>
+    <EditForm Model="@game" FormName="editGame" OnValidSubmit="HandleSubmit">
+        <div class="row">
+            <div class="col-md-4">
+                <DataAnnotationsValidator />
+                <ValidationSummary/>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <InputText id="name" @bind-Value="game.Name" class="form-control" />
+                    <ValidationMessage For="() => game.Name" />
+                </div>
+                <div class="mb-3">
+                    <label for="genre" class="form-label">Genre:</label>
+                    <InputSelect id="genre" @bind-Value="game.GenreId" class="form-control">
+                        <option value="">Select a genre</option>
+                        @foreach (var genre in genres)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => game.GenreId" />
 
-        </div>
-        <div class="mb-3">
-            <label for="price" class="form-label">Price:</label>
-            <InputNumber id="price" @bind-Value="game.Price" class="form-control" />
-        </div>
-        <div class="mb-3">
-            <label for="releaseDate" class="form-label">Release Date:</label>
-            <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control">
-            </InputDate>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <InputNumber id="price" @bind-Value="game.Price" class="form-control" />
+                    <ValidationMessage For="() => game.Price" />
+                </div>
+                <div class="mb-3">
+                    <label for="releaseDate" class="form-label">Release Date:</label>
+                    <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control">
+                    </InputDate>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a role="button" class="btn btn-secondary" href="/">Cancel</a>
+            </div>
         </div>
     </EditForm>
 }
 
 
 @code {
+    [SupplyParameterFromForm]
     private GameDetails game { get; set; } = new()
         {
             Name = string.Empty,
@@ -47,13 +60,18 @@ else
 
         };
 
-    private GenresClient genresClient = new();
     private Genre[]? genres;
 
     protected override void OnInitialized()
     {
-        genres = genresClient.GetGenres();
+        genres = GenresClient.GetGenres();
 
+    }
+
+    private void HandleSubmit()
+    {
+        this.GamesClient.AddGame(this.game);
+        this.NavigationManager.NavigateTo("/");
     }
 
 }

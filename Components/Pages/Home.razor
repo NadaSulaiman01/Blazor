@@ -1,8 +1,10 @@
 ﻿@page "/"
-@using GameStore.Frontend.Clients
-@using GameStore.Frontend.Models
+@inject GamesClient GamesClient
 
 <PageTitle>Game Catalog</PageTitle>
+<div class="mt-2">
+    <a role="button" class="btn btn-primary" href="/editgame">New Game</a>
+</div>
 @if(games is null){
     <p><em>Loading....</em></p>
 }
@@ -34,11 +36,10 @@ else{
 }
 
 @code{
-    private GamesClient client = new();
     private GameSummary[]? games;
 
     protected override void OnInitialized(){
-        games = client.getGames();
+        games = GamesClient.getGames();
     }
 
     

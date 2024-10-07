@@ -32,4 +32,19 @@ public class GamesClient
 
     public GameSummary[] getGames() => [.. this.games];
 
+    public void AddGame(GameDetails game){
+
+        ArgumentException.ThrowIfNullOrEmpty(game.GenreId);
+        Genre genre = new GenresClient().GetGenres().Single( g => g.Id == int.Parse(game.GenreId));
+
+        GameSummary gameSummary = new(){
+            Id = games.Count + 1,
+            Name = game.Name,
+            Price = game.Price,
+            ReleaseDate = game.ReleaseDate,
+            Genre = genre.Name
+        }; 
+        games.Add(gameSummary);
+    }
+
 }
