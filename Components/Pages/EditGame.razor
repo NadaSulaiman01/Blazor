@@ -1,11 +1,13 @@
 ﻿@page "/editgame"
+@page "/editgame/{id:int}"
+
 @inject NavigationManager NavigationManager
 @inject GamesClient GamesClient
 @inject GenresClient GenresClient
 
-<title>New game</title>
-<h3>New Game</h3>
-@if (genres is null)
+<title>@title</title>
+<h3>@title</h3>
+@if (genres is null || game is null)
 {
     <p><em>Loading.....</em></p>
 }
@@ -15,7 +17,7 @@ else
         <div class="row">
             <div class="col-md-4">
                 <DataAnnotationsValidator />
-                <ValidationSummary/>
+                <ValidationSummary />
                 <div class="mb-3">
                     <label for="name" class="form-label">Name:</label>
                     <InputText id="name" @bind-Value="game.Name" class="form-control" />
@@ -52,14 +54,12 @@ else
 
 
 @code {
+    [Parameter]
+    public int? Id { get; set; }
+
     [SupplyParameterFromForm]
-    private GameDetails game { get; set; } = new()
-        {
-            Name = string.Empty,
-            ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
-
-        };
-
+    private GameDetails? game { get; set; }
+    private String title {get; set;} = string.Empty;
     private Genre[]? genres;
 
     protected override void OnInitialized()
@@ -68,9 +68,42 @@ else
 
     }
 
+    protected override void OnParametersSet()
+    {
+        if(game is not null){
+            return;
+        }
+        if (Id is not null)
+        {
+            game = GamesClient.GetGame(Id.Value);
+            title += $"Edit {game.Name}";
+        }
+        else
+        {
+            game = new()
+                {
+                    Name = string.Empty,
+                    ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
+
+                };
+            title += $"New Game";
+
+        }
+
+
+    }
+
     private void HandleSubmit()
     {
-        this.GamesClient.AddGame(this.game);
+        ArgumentNullException.ThrowIfNull(this.game);
+
+        if(Id is null){
+            this.GamesClient.AddGame(this.game);
+        }else{
+            this.game.Id = Id.Value;
+            this.GamesClient.UpdateGame(this.game);
+        }
+
         this.NavigationManager.NavigateTo("/");
     }
 
