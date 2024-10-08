@@ -16,14 +16,14 @@ public class GamesClient
         new(){
         Id = 2,
         Name = "Game 2",
-        Genre = "Action",
+        Genre = "Kids and Family",
         Price = 13.99M,
         ReleaseDate = new DateOnly(2001,03,06)
     },
         new(){
         Id = 3,
         Name = "Game 3",
-        Genre = "Story",
+        Genre = "Roleplaying",
         Price = 99.99M,
         ReleaseDate = new DateOnly(2024,06,06)
     }
@@ -75,6 +75,10 @@ public class GamesClient
         existingGameSummary.Genre = genre.Name;
         existingGameSummary.Price = gameDetails.Price;
         existingGameSummary.ReleaseDate = gameDetails.ReleaseDate;
+    }
+    public void DeleteGame(int id){
+        var game = GetGameSummaryById(id);
+        games.Remove(game);
     }
     
     private static Genre GetGenreById(string? genreId)
