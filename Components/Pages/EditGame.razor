@@ -14,7 +14,7 @@
 }
 else
 {
-    <EditForm Model="@game" FormName="editGame" OnValidSubmit="HandleSubmit">
+    <EditForm Model="@game" FormName="editGame" OnValidSubmit="HandleSubmitAsync" Enhance>
         <div class="row">
             <div class="col-md-4">
                 <DataAnnotationsValidator />
@@ -63,20 +63,20 @@ else
     private String title {get; set;} = string.Empty;
     private Genre[]? genres;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        genres = GenresClient.GetGenres();
+        genres = await GenresClient.GetGenresAsync();
 
     }
 
-    protected override void OnParametersSet()
+    protected override async Task OnParametersSetAsync()
     {
         if(game is not null){
             return;
         }
         if (Id is not null)
         {
-            game = GamesClient.GetGame(Id.Value);
+            game = await GamesClient.GetGameAsync(Id.Value);
             title += $"Edit {game.Name}";
         }
         else
@@ -94,15 +94,15 @@ else
 
     }
 
-    private void HandleSubmit()
+    private async Task HandleSubmitAsync()
     {
         ArgumentNullException.ThrowIfNull(this.game);
 
         if(Id is null){
-            this.GamesClient.AddGame(this.game);
+            await this.GamesClient.AddGameAsync(this.game);
         }else{
             this.game.Id = Id.Value;
-            this.GamesClient.UpdateGame(this.game);
+            await this.GamesClient.UpdateGameAsync(this.game);
         }
 
         this.NavigationManager.NavigateTo("/");
